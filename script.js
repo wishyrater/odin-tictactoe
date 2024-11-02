@@ -81,12 +81,23 @@ document.addEventListener("DOMContentLoaded", function() {
                         board[j][2 - j].getValue() === tokenToCheck ? sum++ : 0;
                     }
                     sum === 3 ? console.log("Winner") : 0;
+                };
+            };
+        };
+
+        const checkTie = () => {
+            let availableCells = 0;
+            for (let i in board) {
+                for (let j in board[i]) {
+                    if (!board[i][j].getValue()) { availableCells++ };
                 }
             }
+
+            availableCells === 0 ? console.log("Tie") : console.log("More cells available");
         }
 
-        return { getBoard, readBoard, makeMove, checkWinner };
-    }
+        return { getBoard, readBoard, makeMove, checkWinner, checkTie };
+    };
 
     const DisplayController = (function () {
 
