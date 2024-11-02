@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", function() {
             };
         };
 
+        let winner = false;
+
         const checkWinner = () => {
             // check rows
             for (let i = 0; i < 3; i++) {
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     for (let j in row) {
                         row[j].getValue() === tokenToCheck ? sum++ : 0;
                     }
-                    sum === 3 ? console.log("Winner") : 0;
+                    sum === 3 ? winner = true : 0;
                 }
             }
 
@@ -62,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     for (let j = 0; j < 3; j++) {
                         board[j][i].getValue() === tokenToCheck ? sum++ : 0;
                     }
-                    sum === 3 ? console.log("Winner") : 0;
+                    sum === 3 ? winner = true : 0;
                 }
             }
 
@@ -80,10 +82,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     for (let j = 2; j >= 0; j--) {
                         board[j][2 - j].getValue() === tokenToCheck ? sum++ : 0;
                     }
-                    sum === 3 ? console.log("Winner") : 0;
+                    sum === 3 ? winner = true : 0;
                 };
             };
         };
+
+        const getWinnerStatus = () => winner;
+
+        let tie = false;
 
         const checkTie = () => {
             let availableCells = 0;
@@ -93,10 +99,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
 
-            availableCells === 0 ? console.log("Tie") : console.log("More cells available");
+            availableCells === 0 ? tie = true : console.log("More cells available");
         }
 
-        return { getBoard, readBoard, makeMove, checkWinner, checkTie };
+        const getTieStatus = () => tie;
+
+        return { getBoard, readBoard, makeMove, checkWinner, checkTie, getWinnerStatus, getTieStatus };
     };
 
     const DisplayController = (function () {
@@ -141,4 +149,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound }
     })();
+
+    const gameItems = document.querySelectorAll(".game-item");
+    gameItems.forEach((item) => item.addEventListener("click", (e) => {
+        const thisItem = e.target;
+        thisItem.textContent = "hey";
+    }))
 });
