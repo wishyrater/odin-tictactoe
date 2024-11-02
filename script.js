@@ -40,7 +40,52 @@ document.addEventListener("DOMContentLoaded", function() {
             };
         };
 
-        return { getBoard, readBoard, makeMove };
+        const checkWinner = () => {
+            // check rows
+            for (let i = 0; i < 3; i++) {
+                const row = board[i];
+                let sum = 0;
+                const tokenToCheck = board[i][0].getValue();
+                if (tokenToCheck) {
+                    for (let j in row) {
+                        row[j].getValue() === tokenToCheck ? sum++ : 0;
+                    }
+                    sum === 3 ? console.log("Winner") : 0;
+                }
+            }
+
+            // check columns
+            for (let i = 0; i < 3; i++) {
+                const tokenToCheck = board[0][i].getValue();
+                if (tokenToCheck) {
+                    let sum = 0;
+                    for (let j = 0; j < 3; j++) {
+                        board[j][i].getValue() === tokenToCheck ? sum++ : 0;
+                    }
+                    sum === 3 ? console.log("Winner") : 0;
+                }
+            }
+
+            // check diagonals
+            for (let i = 0; i < 2; i++) {
+                const tokenToCheck = i === 0 ? board[0][0].getValue() : board[2][0].getValue();
+                if (tokenToCheck && i === 0) {
+                    let sum = 0;
+                    for (let j = 0; j < 3; j++) {
+                        board[j][j].getValue() === tokenToCheck ? sum++ : 0;
+                    }
+                    sum === 3 ? console.log("Winner") : 0;
+                } else if (tokenToCheck && i === 1) {
+                    let sum = 0
+                    for (let j = 2; j >= 0; j--) {
+                        board[j][2 - j].getValue() === tokenToCheck ? sum++ : 0;
+                    }
+                    sum === 3 ? console.log("Winner") : 0;
+                }
+            }
+        }
+
+        return { getBoard, readBoard, makeMove, checkWinner };
     }
 
     const DisplayController = (function () {
@@ -71,14 +116,18 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log(
                 `${getCurrentPlayer().name}'s turn`
             );
+        };
+
+        const playRound = (x, y) => {
+            board.makeMove(x, y, getCurrentPlayer().token);
+
+            // check for a winner
+            board.checkWinner();
+
+
+            alternatePlayer();
+            displayNewRound();
         }
-
-
-
+        return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound }
     })();
-    
-    let thisBoard = Gameboard();
-    thisBoard.makeMove(1, 2, "X");
-    thisBoard.readBoard();
-
 });
