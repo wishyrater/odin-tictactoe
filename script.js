@@ -27,17 +27,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const getBoard = () => board;
 
-        const readBoard = () => {
-            const renderedBoard = board.map((row) => 
-            row.map((cell) => cell.getValue()));
-            console.log(renderedBoard);
-        };
-
         const makeMove = (x, y, token) => {
             const thisCell = board[x][y];
             if (!thisCell.getValue()) {
                 thisCell.addToken(token);
             };
+        };
+
+        const readBoard = () => {
+            const gridContainer = document.querySelector(".game-container");
+            gridContainer.innerHTML = '';
+
+            for (let i = 0; i < rows; i++) {
+                const row = board[i];
+                for (let j = 0; j < columns; j++) {
+                    const gridItem = document.createElement("div");
+                    gridItem.setAttribute("class", "game-item");
+                    gridItem.setAttribute("data-row", i);
+                    gridItem.setAttribute("data-col", j);
+                    gridItem.textContent = board[i][j].getValue();
+                    gridContainer.appendChild(gridItem);
+                }
+            }
         };
 
         let winner = false;
@@ -114,11 +125,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const players = [
             {
                 name: 'Player 1',
-                token: 'X'
+                token: 'X',
+                score: 0,
             },
             {
                 name: 'Player 2',
-                token: 'O'
+                token: 'O',
+                score: 0,
             }
         ];
 
@@ -129,6 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
         };
 
         const getCurrentPlayer = () => currentPlayer;
+        const addPlayerScore = (player) => player.score++;
 
         const displayNewRound = () => {
             board.readBoard();
@@ -142,6 +156,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // check for a winner
             board.checkWinner();
+            if (board.getWinnerStatus) {
+                getCurrentPlayer.addPlayerScore();
+            }
+
+            board.checkTie();
+            if (board.getTieStatus) {
+                
+            }
 
 
             alternatePlayer();
@@ -149,10 +171,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound }
     })();
+    DisplayController.displayNewRound();
 
-    const gameItems = document.querySelectorAll(".game-item");
-    gameItems.forEach((item) => item.addEventListener("click", (e) => {
-        const thisItem = e.target;
-        thisItem.textContent = "hey";
-    }))
+    const gameContainer = document.querySelector(".game-container");
+    gameContainer.addEventListener("click", (e) => {
+        if (e.target.classList.contains("game-item")) {
+            const item = e.target;
+            const row = item.getAttribute("data-row");
+            const col = item.getAttribute("data-col");
+
+            DisplayController.playRound(row, col, DisplayController.getCurrentPlayer().token);
+        }
+    })
 });
