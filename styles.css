@@ -7,6 +7,13 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    background-color: #f0f0f0;
+}
+
+h1 {
+    font-size: 48px;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .game-container {
@@ -21,10 +28,12 @@ body {
 }
 
 .game-item {
-    background-color: blue;
+    background-color: mediumaquamarine;
     color: white;
     font-size: 48px;
+    font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 12px;
 }
