@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function() {
             gridContainer.innerHTML = '';
 
             for (let i = 0; i < rows; i++) {
-                const row = board[i];
                 for (let j = 0; j < columns; j++) {
                     const gridItem = document.createElement("div");
                     gridItem.setAttribute("class", "game-item");
@@ -87,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     for (let j = 0; j < 3; j++) {
                         board[j][j].getValue() === tokenToCheck ? sum++ : 0;
                     }
-                    sum === 3 ? console.log("Winner") : 0;
+                    sum === 3 ? winner = true : 0;
                 } else if (tokenToCheck && i === 1) {
                     let sum = 0
                     for (let j = 2; j >= 0; j--) {
@@ -106,11 +105,12 @@ document.addEventListener("DOMContentLoaded", function() {
             let availableCells = 0;
             for (let i in board) {
                 for (let j in board[i]) {
-                    if (!board[i][j].getValue()) { availableCells++ };
+                    if (!board[i][j].getValue()) { 
+                        availableCells++;
+                     };
                 }
             }
-
-            availableCells === 0 ? tie = true : console.log("More cells available");
+            availableCells === 0 ? tie = true : 0;
         }
 
         const getTieStatus = () => tie;
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const DisplayController = (function () {
 
-        const board = Gameboard();
+        let board = Gameboard();
 
         const players = [
             {
@@ -141,14 +141,26 @@ document.addEventListener("DOMContentLoaded", function() {
             currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
         };
 
+        const displayScores = () => {
+            const scoreContainer = document.querySelector(".score-container");
+            scoreContainer.innerHTML = '';
+            players.map((player) => {
+                const playerScore = document.createElement("p");
+                playerScore.textContent = `${player.name}'s score: ${player.score}`;
+                scoreContainer.appendChild(playerScore);
+            })
+        }
+
         const getCurrentPlayer = () => currentPlayer;
-        const addPlayerScore = (player) => player.score++;
+        const addPlayerScore = (player) => {
+            player.score++;
+
+        }
 
         const displayNewRound = () => {
             board.readBoard();
-            console.log(
-                `${getCurrentPlayer().name}'s turn`
-            );
+            const headingContainer = document.querySelector("h1");
+            headingContainer.textContent = `${getCurrentPlayer().name}'s turn`;
         };
 
         const playRound = (x, y) => {
@@ -156,20 +168,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // check for a winner
             board.checkWinner();
-            if (board.getWinnerStatus) {
-                getCurrentPlayer.addPlayerScore();
+            if (board.getWinnerStatus()) {
+                currentPlayer.score++;
+                displayScores();
+                board = Gameboard();
             }
 
+            // check for a tie
             board.checkTie();
-            if (board.getTieStatus) {
-                
+            if (board.getTieStatus()) {
+                board = Gameboard();
             }
-
 
             alternatePlayer();
             displayNewRound();
         }
-        return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound }
+        return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound, addPlayerScore, displayScores }
     })();
     DisplayController.displayNewRound();
 
