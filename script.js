@@ -115,7 +115,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const getTieStatus = () => tie;
 
-        return { getBoard, readBoard, makeMove, checkWinner, checkTie, getWinnerStatus, getTieStatus };
+        function getCellFreeStatus(x, y) {
+            if (!board[x][y].getValue()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return { getBoard, readBoard, makeMove, checkWinner, checkTie, getWinnerStatus, getTieStatus, getCellFreeStatus };
     };
 
     const DisplayController = (function () {
@@ -148,14 +156,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 const playerScore = document.createElement("p");
                 playerScore.textContent = `${player.name}'s score: ${player.score}`;
                 scoreContainer.appendChild(playerScore);
-            })
-        }
+            });
+        };
 
         const getCurrentPlayer = () => currentPlayer;
         const addPlayerScore = (player) => {
             player.score++;
-
-        }
+        };
 
         const displayNewRound = () => {
             board.readBoard();
@@ -164,28 +171,31 @@ document.addEventListener("DOMContentLoaded", function() {
         };
 
         const playRound = (x, y) => {
-            board.makeMove(x, y, getCurrentPlayer().token);
+            if (board.getCellFreeStatus(x, y)) {
+                board.makeMove(x, y, getCurrentPlayer().token);
 
-            // check for a winner
-            board.checkWinner();
-            if (board.getWinnerStatus()) {
-                currentPlayer.score++;
-                displayScores();
-                board = Gameboard();
+                // check for a winner
+                board.checkWinner();
+                if (board.getWinnerStatus()) {
+                    currentPlayer.score++;
+                    displayScores();
+                    board = Gameboard();
+                }
+    
+                // check for a tie
+                board.checkTie();
+                if (board.getTieStatus()) {
+                    board = Gameboard();
+                }
+    
+                alternatePlayer();
+                displayNewRound();
             }
-
-            // check for a tie
-            board.checkTie();
-            if (board.getTieStatus()) {
-                board = Gameboard();
-            }
-
-            alternatePlayer();
-            displayNewRound();
         }
         return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound, addPlayerScore, displayScores }
     })();
     DisplayController.displayNewRound();
+    DisplayController.displayScores();
 
     const gameContainer = document.querySelector(".game-container");
     gameContainer.addEventListener("click", (e) => {
