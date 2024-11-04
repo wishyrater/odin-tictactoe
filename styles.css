@@ -8,7 +8,8 @@ body {
     justify-content: center;
     align-items: center;
 
-    background-color: #f0f0f0;
+    background-color: #1f1b24;
+    color: #f8f8f8;
 }
 
 h1 {
@@ -29,11 +30,24 @@ h1 {
 
 .game-item {
     background-color: mediumaquamarine;
-    color: white;
+    color: black;
     font-size: 48px;
     font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 12px;
+}
+
+.score-container {
+    background-color: mediumaquamarine;
+    color: black;
+    margin-top: 40px;
+    width: 400px;
+    padding: 20px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
 }
