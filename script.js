@@ -196,14 +196,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 alternatePlayer();
                 displayNewRound();
             }
+        };
+
+        const reset = () => {
+            players.map((player) => player.score = 0);
+            board = Gameboard();
+            displayNewRound();
+            displayScores();
         }
-        return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound, addPlayerScore, displayScores, setPlayerNames }
+        return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound, addPlayerScore, displayScores, setPlayerNames, reset }
     })();
 
     const startButton = document.querySelector("button[type='submit']");
     const playerOneInput = document.querySelector("#player-one-name");
     const playerTwoInput = document.querySelector("#player-two-name");
     const main = document.querySelector("main");
+    const resetButton = document.querySelector("#reset-button");
+
     startButton.addEventListener("click", (e) => {
         e.preventDefault();
         DisplayController.setPlayerNames(playerOneInput.value, playerTwoInput.value);
@@ -211,6 +220,10 @@ document.addEventListener("DOMContentLoaded", function() {
         DisplayController.displayNewRound();
         DisplayController.displayScores();
     });
+
+    resetButton.addEventListener("click", () => {
+        DisplayController.reset();
+    })
 
     const gameContainer = document.querySelector(".game-container");
     gameContainer.addEventListener("click", (e) => {
