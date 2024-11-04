@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         let board = Gameboard();
 
-        const players = [
+        let players = [
             {
                 name: 'Player 1',
                 token: 'X',
@@ -142,6 +142,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 score: 0,
             }
         ];
+
+        const setPlayerNames = (playerOne, playerTwo) => {
+            players[0].name = playerOne;
+            players[1].name = playerTwo;
+        }
 
         let currentPlayer = players[0];
 
@@ -166,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         const displayNewRound = () => {
             board.readBoard();
-            const headingContainer = document.querySelector("h1");
+            const headingContainer = document.querySelector("h2");
             headingContainer.textContent = `${getCurrentPlayer().name}'s turn`;
         };
 
@@ -192,10 +197,20 @@ document.addEventListener("DOMContentLoaded", function() {
                 displayNewRound();
             }
         }
-        return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound, addPlayerScore, displayScores }
+        return { alternatePlayer, getCurrentPlayer, displayNewRound, playRound, addPlayerScore, displayScores, setPlayerNames }
     })();
-    DisplayController.displayNewRound();
-    DisplayController.displayScores();
+
+    const startButton = document.querySelector("button[type='submit']");
+    const playerOneInput = document.querySelector("#player-one-name");
+    const playerTwoInput = document.querySelector("#player-two-name");
+    const main = document.querySelector("main");
+    startButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        DisplayController.setPlayerNames(playerOneInput.value, playerTwoInput.value);
+        main.style.visibility = "visible";
+        DisplayController.displayNewRound();
+        DisplayController.displayScores();
+    });
 
     const gameContainer = document.querySelector(".game-container");
     gameContainer.addEventListener("click", (e) => {
@@ -206,5 +221,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
             DisplayController.playRound(row, col, DisplayController.getCurrentPlayer().token);
         }
-    })
+    });
 });
