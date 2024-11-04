@@ -5,7 +5,6 @@ body {
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 
     background-color: #1f1b24;
@@ -14,7 +13,60 @@ body {
 
 h1 {
     font-size: 48px;
+    text-align: center;
     font-family: 'Courier New', Courier, monospace;
+}
+
+h2 {
+    font-size: 48px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+main {
+    display: grid;
+    justify-items: center;
+    visibility: hidden;
+}
+
+header {
+    display: grid;
+    margin-top: 100px;
+}
+
+label {
+    font-size: 24px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+input[type="text"] {
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+form {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 20px;
+}
+
+button[type="submit"] {
+    align-self: end;
+    height: 50px;
+    width: 100px;
+    border-radius: 12px;
+    background-color: mediumaquamarine;
+    font-size: 24px;
+}
+
+button[type="submit"]:hover {
+    cursor: pointer;
+}
+
+.input-item {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .game-container {
@@ -50,4 +102,17 @@ h1 {
     font-weight: bold;
     text-align: center;
     font-family: 'Courier New', Courier, monospace;
+}
+
+#reset-button {
+    margin-top: 40px;
+    font-size: 24px;
+    height: 50px;
+    width: 100px;
+    border-radius: 12px;
+    background-color: mediumaquamarine;
+}
+
+#reset-button:hover {
+    cursor: pointer;
 }
